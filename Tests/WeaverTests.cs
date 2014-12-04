@@ -40,11 +40,18 @@ public class WeaverTests
     public void ValidateHelloWorldIsInjected()
     {
         var type = ModifiedAssembly.GetType("AssemblyToProcess.Class1");
-        var property = (DependencyProperty)type.GetField("MyPropProperty").GetValue(null);
+        var myProp = (DependencyProperty)type.GetField("MyPropProperty").GetValue(null);
+        var intProp = (DependencyProperty)type.GetField("IntPropProperty").GetValue(null);
         var instance = (dynamic)Activator.CreateInstance(type);
-        instance.MyProp = "Bye";
+        instance.MyProp = "Hi";
+        Assert.AreEqual("Hi", instance.MyProp);
+        Assert.AreEqual("Hi", instance.GetValue(myProp));
+        instance.SetValue(myProp, "Bye");
         Assert.AreEqual("Bye", instance.MyProp);
-        Assert.AreEqual("Bye", instance.GetValue(property));
+        Assert.AreEqual(0, instance.IntProp);
+        instance.IntProp = 23;
+        Assert.AreEqual(23, instance.IntProp);
+        Assert.AreEqual(23, instance.GetValue(intProp));
     }
 
 #if(DEBUG)
