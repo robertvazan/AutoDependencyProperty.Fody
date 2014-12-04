@@ -75,7 +75,15 @@ public class ModuleWeaver
             }
     }
 
-    ModuleDefinition CheckAssembly(string name) { return Check(() => ModuleDefinition.AssemblyResolver.Resolve(ModuleDefinition.AssemblyReferences.Single(a => a.Name == name)).MainModule, "load " + name); }
+    ModuleDefinition CheckAssembly(string name)
+    {
+        return Check(() => ModuleDefinition.AssemblyResolver.Resolve(
+            (from assembly in ModuleDefinition.AssemblyReferences
+             where assembly.Name.ToLowerInvariant() == name.ToLowerInvariant()
+             orderby assembly.Version descending
+             select assembly).First()).MainModule, "load " + name);
+    }
+
     MethodReference CheckImport(Func<MethodDefinition> factory, string name) { return Check(() => ModuleDefinition.Import(factory()), "import " + name); }
     static T Check<T>(Func<T> func, string message)
     {
