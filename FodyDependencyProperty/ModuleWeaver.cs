@@ -12,8 +12,6 @@ public class ModuleWeaver
 
     public void Execute()
     {
-        // TODO: remove the generated backing field
-        // TODO: some compiler generated attribute on getter/setter
         var windowsBaseRef = ModuleDefinition.AssemblyReferences.FirstOrDefault(a => a.Name == "WindowsBase");
         if (windowsBaseRef != null)
         {
@@ -33,6 +31,11 @@ public class ModuleWeaver
                     foreach (var property in type.Properties)
                         if (!property.IsSpecialName && property.HasThis && property.GetMethod != null && property.SetMethod != null && property.GetMethod.IsPublic && property.SetMethod.IsPublic && property.CustomAttributes.Concat(type.CustomAttributes).Any(a => a.AttributeType.FullName == "FodyDependencyPropertyMarker.DependencyPropertyAttribute"))
                         {
+                            if (type.Fields.Any(f => f.Name == property.Name + "Property"))
+                                continue;
+                            var backing = type.Fields.FirstOrDefault(f => f.Name == "<" + property.Name + ">k__BackingField" && f.FieldType.FullName == property.PropertyType.FullName);
+                            if (backing == null)
+                                continue;
                             var field = new FieldDefinition(property.Name + "Property", FieldAttributes.Static | FieldAttributes.InitOnly | FieldAttributes.Public, depPropertyRef);
                             type.Fields.Add(field);
                             instructions.Add(Instruction.Create(OpCodes.Ldstr, property.Name));
@@ -60,6 +63,7 @@ public class ModuleWeaver
                                 setter.Emit(OpCodes.Box, property.PropertyType);
                             setter.Emit(OpCodes.Call, setValue);
                             setter.Emit(OpCodes.Ret);
+                            type.Fields.Remove(backing);
                         }
                     var cctor = type.Methods.FirstOrDefault(m => m.Name == ".cctor");
                     if (cctor == null)
