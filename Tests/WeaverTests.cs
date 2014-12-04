@@ -37,7 +37,7 @@ public class WeaverTests
     }
 
     [Test]
-    public void ValidateHelloWorldIsInjected()
+    public void CheckProperties()
     {
         var type = ModifiedAssembly.GetType("AssemblyToProcess.Class1");
         var myProp = (DependencyProperty)type.GetField("MyPropProperty").GetValue(null);

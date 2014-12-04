@@ -12,6 +12,9 @@ public class ModuleWeaver
 
     public void Execute()
     {
+        var markerDll = Check(() => ModuleDefinition.AssemblyReferences.SingleOrDefault(a => a.Name.ToLowerInvariant() == "FodyDependencyPropertyMarker".ToLowerInvariant()), "find FodyDependencyPropertyMarker reference");
+        if (markerDll == null)
+            return;
         var windowsBase = CheckAssembly("WindowsBase");
         var mscorlib = CheckAssembly("mscorlib");
         var typeFromHandle = CheckImport(() => mscorlib.GetType("System.Type").Methods.Single(m => m.Name == "GetTypeFromHandle"), "GetTypeFromHandle");
@@ -61,6 +64,8 @@ public class ModuleWeaver
                         setter.Emit(OpCodes.Call, setValue);
                         setter.Emit(OpCodes.Ret);
                         type.Fields.Remove(backing);
+                        foreach (var attribute in property.CustomAttributes.Where(a => a.AttributeType.FullName == "FodyDependencyPropertyMarker.DependencyPropertyAttribute").ToList())
+                            property.CustomAttributes.Remove(attribute);
                     }
                 var cctor = type.Methods.FirstOrDefault(m => m.Name == ".cctor");
                 if (cctor == null)
@@ -72,7 +77,10 @@ public class ModuleWeaver
                 instructions.Reverse();
                 foreach (var instruction in instructions)
                     cctor.Body.Instructions.Insert(0, instruction);
+                foreach (var attribute in type.CustomAttributes.Where(a => a.AttributeType.FullName == "FodyDependencyPropertyMarker.DependencyPropertyAttribute").ToList())
+                    type.CustomAttributes.Remove(attribute);
             }
+        ModuleDefinition.AssemblyReferences.Remove(markerDll);
     }
 
     ModuleDefinition CheckAssembly(string name)
@@ -93,7 +101,7 @@ public class ModuleWeaver
         }
         catch (Exception e)
         {
-            throw new AggregateException("FodeDependencyProperty weaver failed to " + message, e);
+            throw new AggregateException("FodyDependencyProperty weaver failed to " + message, e);
         }
     }
 
