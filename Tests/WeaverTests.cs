@@ -27,7 +27,7 @@ public class WeaverTests
         var moduleDefinition = ModuleDefinition.ReadModule(ModifiedPath);
         var weavingTask = new ModuleWeaver
         {
-            Module = moduleDefinition
+            ModuleDefinition = moduleDefinition
         };
 
         weavingTask.Execute();
