@@ -18,7 +18,7 @@ public class WeaverTests
         var projectPath = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, @"..\..\..\AssemblyToProcess\AssemblyToProcess.csproj"));
         OriginalPath = Path.Combine(Path.GetDirectoryName(projectPath), @"bin\Debug\AssemblyToProcess.dll");
 #if (!DEBUG)
-        assemblyPath = assemblyPath.Replace("Debug", "Release");
+        OriginalPath = OriginalPath.Replace("Debug", "Release");
 #endif
 
         ModifiedPath = OriginalPath.Replace(".dll", "2.dll");
@@ -27,7 +27,7 @@ public class WeaverTests
         var moduleDefinition = ModuleDefinition.ReadModule(ModifiedPath);
         var weavingTask = new ModuleWeaver
         {
-            ModuleDefinition = moduleDefinition
+            Module = moduleDefinition
         };
 
         weavingTask.Execute();
