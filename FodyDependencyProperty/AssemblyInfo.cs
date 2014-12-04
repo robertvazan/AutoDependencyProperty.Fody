@@ -5,4 +5,4 @@
 [assembly: AssemblyProduct("FodyDependencyProperty")]
 [assembly: AssemblyCompany("Robert Važan")]
 [assembly: AssemblyCopyright("Copyright © 2014 Robert Važan")]
-[assembly: AssemblyVersion("1.0.4.0")]
+[assembly: AssemblyVersion("1.1.0.0")]
