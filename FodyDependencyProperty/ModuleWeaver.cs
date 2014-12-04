@@ -12,7 +12,6 @@ public class ModuleWeaver
 
     public void Execute()
     {
-        // TODO: condition with marker attribute
         // TODO: remove the generated backing field
         // TODO: some compiler generated attribute on getter/setter
         var windowsBaseRef = ModuleDefinition.AssemblyReferences.FirstOrDefault(a => a.Name == "WindowsBase");
@@ -32,7 +31,7 @@ public class ModuleWeaver
                 {
                     var instructions = new List<Instruction>();
                     foreach (var property in type.Properties)
-                        if (!property.IsSpecialName && property.HasThis && property.GetMethod != null && property.SetMethod != null && property.GetMethod.IsPublic && property.SetMethod.IsPublic && property.Name != "Another")
+                        if (!property.IsSpecialName && property.HasThis && property.GetMethod != null && property.SetMethod != null && property.GetMethod.IsPublic && property.SetMethod.IsPublic && property.CustomAttributes.Concat(type.CustomAttributes).Any(a => a.AttributeType.FullName == "FodyDependencyPropertyMarker.DependencyPropertyAttribute"))
                         {
                             var field = new FieldDefinition(property.Name + "Property", FieldAttributes.Static | FieldAttributes.InitOnly | FieldAttributes.Public, depPropertyRef);
                             type.Fields.Add(field);
