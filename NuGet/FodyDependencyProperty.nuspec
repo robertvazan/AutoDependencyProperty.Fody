@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata minClientVersion="2.8">
-    <id>$id$</id>
+    <id>FodyDependencyProperty</id>
     <version>$version$</version>
     <title>FodyDependencyProperty</title>
     <authors>Robert Važan</authors>
@@ -10,7 +10,7 @@
     <licenseUrl>http://opensource.org/licenses/BSD-3-Clause</licenseUrl>
     <projectUrl>https://bitbucket.org/robertvazan/fodydependencyproperty</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>$description$</description>
+    <description>Fody plugin that converts automatic C# property into WPF DependencyProperty during build</description>
     <tags>Fody WPF XAML DependencyProperty</tags>
     <dependencies>
       <dependency id="Fody"/>
