@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 public class ModuleWeaver
 {
-    public ModuleDefinition Module { get; set; }
+    public ModuleDefinition ModuleDefinition { get; set; }
 
     public void Execute()
     {
@@ -19,9 +19,9 @@ public class ModuleWeaver
         var getValue = CheckImport(() => depObject.Methods.Single(m => m.Name == "GetValue"), "GetValue");
         var setValue = CheckImport(() => depObject.Methods.Single(m => m.Name == "SetValue" && m.Parameters.Count == 2 && m.Parameters[0].ParameterType.Name == "DependencyProperty" && m.Parameters[1].ParameterType.Name == "Object"), "SetValue");
         var depProperty = Check(() => windowsBase.GetType("System.Windows.DependencyProperty"), "load DependencyProperty");
-        var depPropertyRef = Check(() => Module.Import(depProperty), "import DependencyProperty");
+        var depPropertyRef = Check(() => ModuleDefinition.Import(depProperty), "import DependencyProperty");
         var registerSimple = CheckImport(() => depProperty.Methods.Single(m => m.Name == "Register" && m.Parameters.Count == 3), "Register");
-        foreach (var type in Module.Types)
+        foreach (var type in ModuleDefinition.Types)
             if (!type.IsSpecialName && type.GenericParameters.Count == 0 && Inherits(type, "System.Windows.DependencyObject"))
             {
                 var instructions = new List<Instruction>();
@@ -65,7 +65,7 @@ public class ModuleWeaver
                 var cctor = type.Methods.FirstOrDefault(m => m.Name == ".cctor");
                 if (cctor == null)
                 {
-                    cctor = new MethodDefinition(".cctor", MethodAttributes.Static | MethodAttributes.SpecialName | MethodAttributes.HideBySig | MethodAttributes.Private | MethodAttributes.RTSpecialName, Module.TypeSystem.Void);
+                    cctor = new MethodDefinition(".cctor", MethodAttributes.Static | MethodAttributes.SpecialName | MethodAttributes.HideBySig | MethodAttributes.Private | MethodAttributes.RTSpecialName, ModuleDefinition.TypeSystem.Void);
                     type.Methods.Add(cctor);
                     cctor.Body.Instructions.Add(Instruction.Create(OpCodes.Ret));
                 }
@@ -75,8 +75,8 @@ public class ModuleWeaver
             }
     }
 
-    ModuleDefinition CheckAssembly(string name) { return Check(() => Module.AssemblyResolver.Resolve(Module.AssemblyReferences.Single(a => a.Name == name)).MainModule, "load " + name); }
-    MethodReference CheckImport(Func<MethodDefinition> factory, string name) { return Check(() => Module.Import(factory()), "import " + name); }
+    ModuleDefinition CheckAssembly(string name) { return Check(() => ModuleDefinition.AssemblyResolver.Resolve(ModuleDefinition.AssemblyReferences.Single(a => a.Name == name)).MainModule, "load " + name); }
+    MethodReference CheckImport(Func<MethodDefinition> factory, string name) { return Check(() => ModuleDefinition.Import(factory()), "import " + name); }
     static T Check<T>(Func<T> func, string message)
     {
         try
