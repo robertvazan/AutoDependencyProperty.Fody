@@ -7,8 +7,8 @@
     <ProjectGuid>{415FD599-6E6D-411F-80F7-70991FD5A0A2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FodyDependencyPropertyMarker</RootNamespace>
-    <AssemblyName>FodyDependencyPropertyMarker</AssemblyName>
+    <RootNamespace>AutoDependencyPropertyMarker</RootNamespace>
+    <AssemblyName>AutoDependencyPropertyMarker</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -41,7 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DependencyPropertyAttribute.cs" />
+    <Compile Include="AutoDependencyPropertyAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -12,7 +12,7 @@ public class ModuleWeaver
 
     public void Execute()
     {
-        var markerDll = Check(() => ModuleDefinition.AssemblyReferences.SingleOrDefault(a => a.Name.ToLowerInvariant() == "FodyDependencyPropertyMarker".ToLowerInvariant()), "find FodyDependencyPropertyMarker reference");
+        var markerDll = Check(() => ModuleDefinition.AssemblyReferences.SingleOrDefault(a => a.Name.ToLowerInvariant() == "AutoDependencyPropertyMarker".ToLowerInvariant()), "find AutoDependencyPropertyMarker reference");
         if (markerDll == null)
             return;
         var windowsBase = CheckAssembly("WindowsBase");
@@ -27,11 +27,6 @@ public class ModuleWeaver
         var registerMeta = CheckImport(() => depProperty.Methods.Single(m => m.Name == "Register" && m.Parameters.Count == 4), "Register");
         var presentationDllRef = Check(() => ModuleDefinition.AssemblyReferences.SingleOrDefault(a => a.Name.ToLowerInvariant() == "PresentationFramework".ToLowerInvariant()), "check for PresentationFramework reference");
         MethodReference metadataCtor = null;
-        if (presentationDllRef != null)
-        {
-            var presentationDll = CheckAssembly("PresentationFramework");
-            metadataCtor = CheckImport(() => presentationDll.GetType("System.Windows.FrameworkPropertyMetadata").GetConstructors().Single(c => c.Parameters.Count == 2 && c.Parameters[1].ParameterType.Name == "FrameworkPropertyMetadataOptions"), "FrameworkPropertyMetadata constructor");
-        }
         foreach (var type in ModuleDefinition.Types)
             if (!type.IsSpecialName && type.GenericParameters.Count == 0 && Inherits(type, "System.Windows.DependencyObject"))
             {
@@ -41,7 +36,7 @@ public class ModuleWeaver
                     if (!property.IsSpecialName && property.HasThis && property.GetMethod != null && property.SetMethod != null && property.GetMethod.IsPublic && property.SetMethod.IsPublic)
                     {
                         var attribute = property.CustomAttributes.Concat(type.CustomAttributes).FirstOrDefault(
-                            a => a.AttributeType.FullName == "FodyDependencyPropertyMarker.DependencyPropertyAttribute");
+                            a => a.AttributeType.FullName == "AutoDependencyPropertyMarker.AutoDependencyPropertyAttribute");
                         if (attribute == null)
                             continue;
                         if (type.Fields.Any(f => f.Name == property.Name + "Property"))
@@ -67,10 +62,23 @@ public class ModuleWeaver
                             instructions.Add(Instruction.Create(OpCodes.Call, registerSimple));
                         else
                         {
+                            if (metadataCtor == null)
+                            {
+                                if (presentationDllRef == null)
+                                {
+                                    metadataCtor = Check(() => ModuleDefinition.Import(typeof(FrameworkPropertyMetadata).GetConstructor(new[] { typeof(object), typeof(FrameworkPropertyMetadataOptions) })), "directly import FrameworkPropertyMetadata constructor");
+                                }
+                                else
+                                {
+                                    var presentationDll = CheckAssembly("PresentationFramework");
+                                    metadataCtor = CheckImport(() => presentationDll.GetType("System.Windows.FrameworkPropertyMetadata").GetConstructors().Single(c => c.Parameters.Count == 2 && c.Parameters[1].ParameterType.Name == "FrameworkPropertyMetadataOptions"), "FrameworkPropertyMetadata constructor");
+                                }
+                            }
                             if (!property.PropertyType.IsValueType)
                                 instructions.Add(Instruction.Create(OpCodes.Ldnull));
                             else
                             {
+                                cctor.Body.InitLocals = true;
                                 var constVar = new VariableDefinition(property.PropertyType);
                                 cctor.Body.Variables.Add(constVar);
                                 instructions.Add(Instruction.Create(OpCodes.Ldloca_S, constVar));
@@ -107,7 +115,7 @@ public class ModuleWeaver
                 instructions.Reverse();
                 foreach (var instruction in instructions)
                     cctor.Body.Instructions.Insert(0, instruction);
-                foreach (var attribute in type.CustomAttributes.Where(a => a.AttributeType.FullName == "FodyDependencyPropertyMarker.DependencyPropertyAttribute").ToList())
+                foreach (var attribute in type.CustomAttributes.Where(a => a.AttributeType.FullName == "AutoDependencyPropertyMarker.AutoDependencyPropertyAttribute").ToList())
                     type.CustomAttributes.Remove(attribute);
             }
         ModuleDefinition.AssemblyReferences.Remove(markerDll);

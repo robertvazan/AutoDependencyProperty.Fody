@@ -63,9 +63,9 @@
     <Compile Include="WeaverTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FodyDependencyProperty\FodyDependencyProperty.csproj">
+    <ProjectReference Include="..\AutoDependencyProperty.Fody\AutoDependencyProperty.Fody.csproj">
       <Project>{C3578A7B-09A6-4444-9383-0DEAFA4958BD}</Project>
-      <Name>FodyDependencyProperty</Name>
+      <Name>AutoDependencyProperty.Fody</Name>
     </ProjectReference>
     <ProjectReference Include="..\AssemblyToProcess\AssemblyToProcess.csproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>

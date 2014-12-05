@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace FodyDependencyPropertyMarker
+namespace AutoDependencyPropertyMarker
 {
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Class)]
-    public class DependencyPropertyAttribute : Attribute
+    public class AutoDependencyPropertyAttribute : Attribute
     {
         public FrameworkPropertyMetadataOptions Options { get; set; }
     }
