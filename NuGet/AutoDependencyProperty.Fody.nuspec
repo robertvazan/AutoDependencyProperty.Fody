@@ -8,7 +8,7 @@
     <owners>Robert Važan</owners>
     <developmentDependency>true</developmentDependency>
     <licenseUrl>http://opensource.org/licenses/BSD-3-Clause</licenseUrl>
-    <projectUrl>https://bitbucket.org/robertvazan/fodydependencyproperty</projectUrl>
+    <projectUrl>http://blog.angeloflogic.com/2014/12/no-more-dependencyproperty-with.html</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Fody plugin that converts automatic C# property into WPF DependencyProperty during build</description>
     <tags>Fody WPF XAML DependencyProperty</tags>
