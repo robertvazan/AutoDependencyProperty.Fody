@@ -5,4 +5,4 @@
 [assembly: AssemblyProduct("AutoDependencyProperty.Fody")]
 [assembly: AssemblyCompany("Robert Važan")]
 [assembly: AssemblyCopyright("Copyright © 2014 Robert Važan")]
-[assembly: AssemblyVersion("1.2.1.0")]
+[assembly: AssemblyVersion("1.2.2.0")]
