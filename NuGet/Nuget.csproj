@@ -12,7 +12,7 @@
     <ConfigurationName>Release</ConfigurationName>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="FodyDependencyProperty.nuspec">
+    <None Include="AutoDependencyProperty.Fody.nuspec">
       <SubType>Designer</SubType>
     </None>
     <None Include="install.ps1" />
@@ -29,18 +29,18 @@
   <Target Name="NuGetBuild" DependsOnTargets="Clean">
     <MakeDir Directories="$(SolutionDir)NuGetBuild" />
     <MakeDir Directories="$(SolutionDir)NuGetBuild\lib\net40" />
-    <Copy SourceFiles="$(SolutionDir)NuGet\FodyDependencyProperty.nuspec" DestinationFolder="$(SolutionDir)NuGetBuild" />
-    <Copy SourceFiles="$(SolutionDir)FodyDependencyProperty\bin\$(ConfigurationName)\FodyDependencyProperty.Fody.dll" DestinationFolder="$(SolutionDir)NuGetBuild" />
-    <Copy SourceFiles="$(SolutionDir)FodyDependencyPropertyMarker\bin\$(ConfigurationName)\FodyDependencyPropertyMarker.dll" DestinationFolder="$(SolutionDir)NuGetBuild\lib\net40" />
+    <Copy SourceFiles="$(SolutionDir)NuGet\AutoDependencyProperty.Fody.nuspec" DestinationFolder="$(SolutionDir)NuGetBuild" />
+    <Copy SourceFiles="$(SolutionDir)AutoDependencyProperty.Fody\bin\$(ConfigurationName)\AutoDependencyProperty.Fody.dll" DestinationFolder="$(SolutionDir)NuGetBuild" />
+    <Copy SourceFiles="$(SolutionDir)AutoDependencyPropertyMarker\bin\$(ConfigurationName)\AutoDependencyPropertyMarker.dll" DestinationFolder="$(SolutionDir)NuGetBuild\lib\net40" />
     <Copy SourceFiles="$(ProjectDir)install.ps1" DestinationFolder="$(SolutionDir)NuGetBuild\Tools" />
     <Copy SourceFiles="$(ProjectDir)uninstall.ps1" DestinationFolder="$(SolutionDir)NuGetBuild\Tools" />
-    <PepitaPackage.CreatePackageTask NuGetBuildDirectory="$(SolutionDir)NuGetBuild" MetadataAssembly="$(SolutionDir)FodyDependencyProperty\bin\$(ConfigurationName)\FodyDependencyProperty.Fody.dll" />
+    <PepitaPackage.CreatePackageTask NuGetBuildDirectory="$(SolutionDir)NuGetBuild" MetadataAssembly="$(SolutionDir)AutoDependencyProperty.Fody\bin\$(ConfigurationName)\AutoDependencyProperty.Fody.dll" />
   </Target>
   <ItemGroup>
-    <ProjectReference Include="..\FodyDependencyProperty\FodyDependencyProperty.csproj">
+    <ProjectReference Include="..\AutoDependencyProperty.Fody\AutoDependencyProperty.Fody.csproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <Project>{C3578A7B-09A6-4444-9383-0DEAFA4958BD}</Project>
-      <Name>FodyDependencyProperty</Name>
+      <Name>AutoDependencyProperty.Fody</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="..\packages\PepitaPackage.1.20.0.0\build\PepitaPackage.targets" Condition="Exists('..\packages\PepitaPackage.1.20.0.0\build\PepitaPackage.targets')" />

@@ -8,8 +8,8 @@
     <ProjectGuid>{C3578A7B-09A6-4444-9383-0DEAFA4958BD}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FodyDependencyProperty</RootNamespace>
-    <AssemblyName>FodyDependencyProperty.Fody</AssemblyName>
+    <RootNamespace>AutoDependencyProperty</RootNamespace>
+    <AssemblyName>AutoDependencyProperty.Fody</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -51,6 +51,8 @@
     <Reference Include="Mono.Cecil.Rocks">
       <HintPath>..\packages\FodyCecil.1.24.0-beta2\lib\net40\Mono.Cecil.Rocks.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml" />

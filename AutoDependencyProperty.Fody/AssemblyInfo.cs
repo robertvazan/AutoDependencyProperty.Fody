@@ -1,8 +1,8 @@
 ﻿using System.Reflection;
 
-[assembly: AssemblyTitle("FodyDependencyProperty")]
+[assembly: AssemblyTitle("AutoDependencyProperty.Fody")]
 [assembly: AssemblyDescription("Fody plugin that converts automatic C# property into WPF DependencyProperty during build")]
-[assembly: AssemblyProduct("FodyDependencyProperty")]
+[assembly: AssemblyProduct("AutoDependencyProperty.Fody")]
 [assembly: AssemblyCompany("Robert Važan")]
 [assembly: AssemblyCopyright("Copyright © 2014 Robert Važan")]
-[assembly: AssemblyVersion("1.1.6.0")]
+[assembly: AssemblyVersion("1.2.1.0")]

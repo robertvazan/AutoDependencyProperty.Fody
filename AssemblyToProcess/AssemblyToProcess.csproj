@@ -45,9 +45,9 @@
     <Compile Include="Class1.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FodyDependencyPropertyMarker\FodyDependencyPropertyMarker.csproj">
+    <ProjectReference Include="..\AutoDependencyPropertyMarker\AutoDependencyPropertyMarker.csproj">
       <Project>{415fd599-6e6d-411f-80f7-70991fd5a0a2}</Project>
-      <Name>FodyDependencyPropertyMarker</Name>
+      <Name>AutoDependencyPropertyMarker</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata minClientVersion="2.8">
-    <id>FodyDependencyProperty.Fody</id>
+    <id>AutoDependencyProperty.Fody</id>
     <version>$version$</version>
-    <title>FodyDependencyProperty</title>
+    <title>AutoDependencyProperty.Fody</title>
     <authors>Robert Važan</authors>
     <owners>Robert Važan</owners>
     <developmentDependency>true</developmentDependency>
