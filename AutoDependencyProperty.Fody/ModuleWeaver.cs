@@ -15,7 +15,7 @@ public class ModuleWeaver
         var markerDll = Check(() => ModuleDefinition.AssemblyReferences.SingleOrDefault(a => a.Name.ToLowerInvariant() == "AutoDependencyPropertyMarker".ToLowerInvariant()), "find AutoDependencyPropertyMarker reference");
         if (markerDll == null)
             return;
-        var windowsBase = CheckAssembly("WindowsBase");
+        var windowsBase = CheckAssembly("WindowsBase", description: "Couldn't find reference to WindowsBase. Or it isn't referenced by project or it was stripped because it wasn't referenced from code. Make sure that your types are subtypes of DependencyObject.");
         var mscorlib = CheckAssembly("mscorlib");
         var typeFromHandle = CheckImport(() => mscorlib.GetType("System.Type").Methods.Single(m => m.Name == "GetTypeFromHandle"), "GetTypeFromHandle");
         var depObject = Check(() => windowsBase.GetType("System.Windows.DependencyObject"), "load DependencyObject");
@@ -121,13 +121,13 @@ public class ModuleWeaver
         ModuleDefinition.AssemblyReferences.Remove(markerDll);
     }
 
-    ModuleDefinition CheckAssembly(string name)
+    ModuleDefinition CheckAssembly(string name, string description = null)
     {
         return Check(() => ModuleDefinition.AssemblyResolver.Resolve(
             (from assembly in ModuleDefinition.AssemblyReferences
              where assembly.Name.ToLowerInvariant() == name.ToLowerInvariant()
              orderby assembly.Version descending
-             select assembly).First()).MainModule, "load " + name);
+             select assembly).First()).MainModule, "load " + name + (description != null ? ". " + description: string.Empty));
     }
 
     MethodReference CheckImport(Func<MethodDefinition> factory, string name) { return Check(() => ModuleDefinition.Import(factory()), "import " + name); }
