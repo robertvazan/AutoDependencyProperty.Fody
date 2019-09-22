@@ -12,10 +12,10 @@ public class WeaverTests
     string ModifiedPath;
     string OriginalPath;
 
-    [TestFixtureSetUp]
+    [SetUp]
     public void Setup()
     {
-        var projectPath = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, @"..\..\..\AssemblyToProcess\AssemblyToProcess.csproj"));
+        var projectPath = Path.GetFullPath(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\AssemblyToProcess\AssemblyToProcess.csproj"));
         OriginalPath = Path.Combine(Path.GetDirectoryName(projectPath), @"bin\Debug\AssemblyToProcess.dll");
 #if (!DEBUG)
         OriginalPath = OriginalPath.Replace("Debug", "Release");
@@ -24,14 +24,16 @@ public class WeaverTests
         ModifiedPath = OriginalPath.Replace(".dll", "2.dll");
         File.Copy(OriginalPath, ModifiedPath, true);
 
-        var moduleDefinition = ModuleDefinition.ReadModule(ModifiedPath);
-        var weavingTask = new ModuleWeaver
+        using (var moduleDefinition = ModuleDefinition.ReadModule(OriginalPath, new ReaderParameters { ReadWrite = true }))
         {
-            ModuleDefinition = moduleDefinition
-        };
+            var weavingTask = new ModuleWeaver
+            {
+                ModuleDefinition = moduleDefinition
+            };
 
-        weavingTask.Execute();
-        moduleDefinition.Write(ModifiedPath);
+            weavingTask.Execute();
+            moduleDefinition.Write(ModifiedPath);
+        }
 
         ModifiedAssembly = Assembly.LoadFile(ModifiedPath);
     }
