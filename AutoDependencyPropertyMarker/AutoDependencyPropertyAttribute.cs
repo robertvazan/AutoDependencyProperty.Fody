@@ -1,4 +1,5 @@
-﻿using System;
+// Part of AutoDependencyProperty.Fody: https://blog.machinezoo.com/no-more-dependencyproperty-with
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

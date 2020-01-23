@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+// Part of AutoDependencyProperty.Fody: https://blog.machinezoo.com/no-more-dependencyproperty-with
+using System.Reflection;
 
 [assembly: AssemblyTitle("AutoDependencyProperty.Fody")]
 [assembly: AssemblyDescription("Fody plugin that converts automatic C# property into WPF DependencyProperty during build")]

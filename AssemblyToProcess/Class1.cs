@@ -1,4 +1,5 @@
-﻿using AutoDependencyPropertyMarker;
+// Part of AutoDependencyProperty.Fody: https://blog.machinezoo.com/no-more-dependencyproperty-with
+using AutoDependencyPropertyMarker;
 using System;
 using System.Windows;
 
